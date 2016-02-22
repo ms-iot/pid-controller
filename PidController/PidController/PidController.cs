@@ -13,51 +13,48 @@
     {
         private float processVariable = 0.0f;
 
-        public PidController() : this(1.0f, 0.5f, 0.0f)
-        {
-        }
-
-        public PidController(float GainProportional) : this(GainProportional, 0.5f, 0.0f)
-        {
-        }
-
-        public PidController(float GainProportional, float GainIntegral) : this(GainProportional, GainIntegral, 0.0f)
-        {
-        }
-
-        public PidController(float GainProportional, float GainIntegral, float GainDerivative)
+        public PidController(float GainProportional, float GainIntegral, float GainDerivative, float OutputMax, float OutputMin)
         {
             this.GainDerivative = GainDerivative;
             this.GainIntegral = GainIntegral;
             this.GainProportional = GainProportional;
+            this.OutputMax = OutputMax;
+            this.OutputMin = OutputMin;
         }
 
         /// <summary>
         /// The controller output
         /// </summary>
-        public float ControlVariable { get { return ((GainProportional * InputProportional) + (GainIntegral * InputIntegral) + (GainDerivative * InputDerivative)); } }
+        public float ControlVariable
+        {
+            get
+            {
+                float error = SetPoint - ProcessVariable;
+                IntegralTerm += (GainIntegral * error);
+                if (IntegralTerm > OutputMax) IntegralTerm = OutputMax;
+                if (IntegralTerm < OutputMin) IntegralTerm = OutputMin;
+                float dInput = processVariable - ProcessVariableLast;
 
-        /// <summary>
-        /// The difference between the current value and the desired value
-        /// </summary>
-        public float Error { get { return (SetPoint - processVariable); } }
+                float output = GainProportional * error + IntegralTerm - GainDerivative * dInput;
 
-        /// <summary>
-        /// The area under the curve created by the oscillation of the PID controller
-        /// </summary>
-        public float ErrorAccumulated { get; private set; } = 0;
+                if (output > OutputMax) output = OutputMax;
+                if (output < OutputMin) output = OutputMin;
+
+                return output;
+            }
+        }
 
         /// <summary>
         /// The derivative term is proportional to the rate of
         /// change of the error
         /// </summary>
-        public float GainDerivative { get; private set; } = 0;
+        public float GainDerivative { get; set; } = 0;
 
         /// <summary>
         /// The integral term is proportional to both the magnitude
         /// of the error and the duration of the error
         /// </summary>
-        public float GainIntegral { get; private set; } = 0;
+        public float GainIntegral { get; set; } = 0;
 
         /// <summary>
         /// The proportional term produces an output value that
@@ -67,7 +64,7 @@
         /// Tuning theory and industrial practice indicate that the
         /// proportional term should contribute the bulk of the output change.
         /// </remarks>
-        public float GainProportional { get; private set; } = 0;
+        public float GainProportional { get; set; } = 0;
 
         /// <summary>
         /// Adjustment made by considering the rate of change of the error
@@ -78,28 +75,24 @@
         public float InputDerivative { get { return (ProcessVariableLast - processVariable); } }
 
         /// <summary>
+        /// The max output value the control device can accept.
+        /// </summary>
+        public float OutputMax { get; private set; } = 0;
+
+        /// <summary>
+        /// The minimum ouput value the control device can accept.
+        /// </summary>
+        public float OutputMin { get; private set; } = 0;
+
+        /// <summary>
         /// Adjustment made by considering the accumulated error over time
         /// </summary>
         /// <remarks>
         /// An alternative formulation of the integral action, is the
         /// proportional-summation-difference used in discrete-time systems
         /// </remarks>
-        public float InputIntegral
-        {
-            get
-            {
-                // Test for reset conditions for accumulated error
-                if (0 == Error) { ErrorAccumulated = 0.0f; }
-                if ((0 > Error && 0 < ErrorAccumulated) || (0 < Error && 0 > ErrorAccumulated)) { ErrorAccumulated = 0.0f; }
+        public float IntegralTerm { get; set; } = 0;
 
-                return (ErrorAccumulated += Error);
-            }
-        }
-
-        /// <summary>
-        /// Adjustment made in proportion to the existing error
-        /// </summary>
-        public float InputProportional { get { return Error * GainProportional; } }
 
         /// <summary>
         /// The current value
