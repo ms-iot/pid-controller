@@ -67,14 +67,6 @@
         public float GainProportional { get; set; } = 0;
 
         /// <summary>
-        /// Adjustment made by considering the rate of change of the error
-        /// </summary>
-        /// <remarks>
-        /// Returns the inverse of the slope to dampen overshoot
-        /// </remarks>
-        public float InputDerivative { get { return (ProcessVariableLast - processVariable); } }
-
-        /// <summary>
         /// The max output value the control device can accept.
         /// </summary>
         public float OutputMax { get; private set; } = 0;
@@ -91,7 +83,7 @@
         /// An alternative formulation of the integral action, is the
         /// proportional-summation-difference used in discrete-time systems
         /// </remarks>
-        public float IntegralTerm { get; set; } = 0;
+        public float IntegralTerm { get; private set; } = 0;
 
 
         /// <summary>
