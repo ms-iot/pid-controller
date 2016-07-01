@@ -55,3 +55,8 @@ PidController controller = new PidController(float GainProportional, float GainI
 
 ## Tuning
 There are lots of resources online for learning how to tune a PID controller. For a quick primer see the Wikipedia entry on [manual tuning](https://en.wikipedia.org/wiki/PID_controller#Manual_tuning).
+
+
+===
+
+This project has adopted the [Microsoft Open Source Code of Conduct](http://microsoft.github.io/codeofconduct). For more information see the [Code of Conduct FAQ](http://microsoft.github.io/codeofconduct/faq.md) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments. 
