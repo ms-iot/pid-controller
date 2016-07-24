@@ -1,4 +1,6 @@
-﻿namespace PidController
+﻿using System;
+
+namespace PidController
 {
     /// <summary>
     /// A (P)roportional, (I)ntegral, (D)erivative Controller
@@ -25,29 +27,26 @@
         /// <summary>
         /// The controller output
         /// </summary>
-        public float ControlVariable
+        public float ControlVariable(TimeSpan timeSinceLastUpdate)
         {
-            get
-            {
-                float error = SetPoint - ProcessVariable;
+            float error = SetPoint - ProcessVariable;
 
-                // integral term calculation
-                IntegralTerm += (GainIntegral * error);
-                IntegralTerm = Clamp(IntegralTerm);
+            // integral term calculation
+            IntegralTerm += (GainIntegral * error * (float)timeSinceLastUpdate.TotalMilliseconds);
+            IntegralTerm = Clamp(IntegralTerm);
 
-                // derivative term calculation
-                float dInput = processVariable - ProcessVariableLast;
-                float derivativeTerm = -GainDerivative * dInput;
+            // derivative term calculation
+            float dInput = processVariable - ProcessVariableLast;
+            float derivativeTerm = -GainDerivative * (dInput / (float)timeSinceLastUpdate.TotalMilliseconds);
 
-                // proportional term calcullation
-                float proportionalTerm = GainProportional * error;
+            // proportional term calcullation
+            float proportionalTerm = GainProportional * error;
 
-                float output = proportionalTerm + IntegralTerm + derivativeTerm;
+            float output = proportionalTerm + IntegralTerm + derivativeTerm;
 
-                output = Clamp(output);
+            output = Clamp(output);
 
-                return output;
-            }
+            return output;
         }
 
         /// <summary>
