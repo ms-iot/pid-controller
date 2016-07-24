@@ -30,12 +30,19 @@
             get
             {
                 float error = SetPoint - ProcessVariable;
+
+                // integral term calculation
                 IntegralTerm += (GainIntegral * error);
                 IntegralTerm = Clamp(IntegralTerm);
 
+                // derivative term calculation
                 float dInput = processVariable - ProcessVariableLast;
+                float derivativeTerm = -GainDerivative * dInput;
 
-                float output = GainProportional * error + IntegralTerm - GainDerivative * dInput;
+                // proportional term calcullation
+                float proportionalTerm = GainProportional * error;
+
+                float output = proportionalTerm + IntegralTerm + derivativeTerm;
 
                 output = Clamp(output);
 
