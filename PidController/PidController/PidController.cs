@@ -27,6 +27,9 @@ namespace PidController
         /// <summary>
         /// The controller output
         /// </summary>
+        /// <param name="timeSinceLastUpdate">timespan of the elapsed time
+        /// since the previous time that ControlVariable was called</param>
+        /// <returns>Value of the variable that needs to be controlled</returns>
         public float ControlVariable(TimeSpan timeSinceLastUpdate)
         {
             float error = SetPoint - ProcessVariable;
@@ -117,9 +120,9 @@ namespace PidController
         /// <summary>
         /// Limit a variable to the set OutputMax and OutputMin properties
         /// </summary>
-        /// <return>
+        /// <returns>
         /// A value that is between the OutputMax and OutputMin properties
-        /// </return>
+        /// </returns>
         /// <remarks>
         /// Inspiration from http://stackoverflow.com/questions/3176602/how-to-force-a-number-to-be-in-a-range-in-c
         /// </remarks>
