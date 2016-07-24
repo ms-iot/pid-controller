@@ -37,7 +37,7 @@ namespace PidController
 
             // derivative term calculation
             float dInput = processVariable - ProcessVariableLast;
-            float derivativeTerm = -GainDerivative * (dInput / (float)timeSinceLastUpdate.TotalMilliseconds);
+            float derivativeTerm = GainDerivative * (dInput / (float)timeSinceLastUpdate.TotalMilliseconds);
 
             // proportional term calcullation
             float proportionalTerm = GainProportional * error;
