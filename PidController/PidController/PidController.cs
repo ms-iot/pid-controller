@@ -30,15 +30,21 @@
             get
             {
                 float error = SetPoint - ProcessVariable;
+
+                // integral term calculation
                 IntegralTerm += (GainIntegral * error);
-                if (IntegralTerm > OutputMax) IntegralTerm = OutputMax;
-                if (IntegralTerm < OutputMin) IntegralTerm = OutputMin;
+                IntegralTerm = Clamp(IntegralTerm);
+
+                // derivative term calculation
                 float dInput = processVariable - ProcessVariableLast;
+                float derivativeTerm = -GainDerivative * dInput;
 
-                float output = GainProportional * error + IntegralTerm - GainDerivative * dInput;
+                // proportional term calcullation
+                float proportionalTerm = GainProportional * error;
 
-                if (output > OutputMax) output = OutputMax;
-                if (output < OutputMin) output = OutputMin;
+                float output = proportionalTerm + IntegralTerm + derivativeTerm;
+
+                output = Clamp(output);
 
                 return output;
             }
@@ -89,9 +95,11 @@
         /// <summary>
         /// The current value
         /// </summary>
-        public float ProcessVariable {
+        public float ProcessVariable
+        {
             get { return processVariable; }
-            set {
+            set
+            {
                 ProcessVariableLast = processVariable;
                 processVariable = value;
             }
@@ -106,5 +114,21 @@
         /// The desired value
         /// </summary>
         public float SetPoint { get; set; } = 0;
+
+        /// <summary>
+        /// Limit a variable to the set OutputMax and OutputMin properties
+        /// </summary>
+        /// <return>
+        /// A value that is between the OutputMax and OutputMin properties
+        /// </return>
+        /// <remarks>
+        /// Inspiration from http://stackoverflow.com/questions/3176602/how-to-force-a-number-to-be-in-a-range-in-c
+        /// </remarks>
+        private float Clamp(float variableToClamp)
+        {
+            if (variableToClamp <= OutputMin) { return OutputMin; }
+            if (variableToClamp >= OutputMax) { return OutputMax; }
+            return variableToClamp;
+        }
     }
 }
