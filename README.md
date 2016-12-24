@@ -26,7 +26,7 @@ A Universal Windows Runtime Component that implements a very simple [proportiona
 
 
 ## Example
-For an example of this code being used to control motor RPM see our [Closed-Loop Control Demo](https://github.com/sidwarkd/pid-control-system).
+For an example of this code being used to control motor RPM see our [Closed-Loop Control Demo](https://github.com/ms-iot/pid-control-system).
 
 ## Constructor
 ```cs
@@ -51,7 +51,10 @@ PidController controller = new PidController(float GainProportional, float GainI
 | ProcessVariable     | ```float``` | get/set | Current value of the process under control                      |
 | ProcessVariableLast | ```float``` | get     | Last stored value of the process under control                  |
 | SetPoint            | ```float``` | get/set | The desired value of the process under control                  |
-| ControlVariable     | ```float``` | get     | The control variable that drives the process under control      |
+
+## Functions
+| Property            | Type        | Access  | Description                                                     |
+| ControlVariable(```TimeSpan timeSinceLastUpdate```)     | ```float``` | The control variable that drives the process under control, depending on the amount of time that passed since the last time it was called      |
 
 ## Tuning
 There are lots of resources online for learning how to tune a PID controller. For a quick primer see the Wikipedia entry on [manual tuning](https://en.wikipedia.org/wiki/PID_controller#Manual_tuning).
