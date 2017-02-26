@@ -35,17 +35,17 @@ namespace PidController
             float error = SetPoint - ProcessVariable;
 
             // integral term calculation
-            IntegralTerm += (GainIntegral * error * (float)timeSinceLastUpdate.TotalMilliseconds);
+            IntegralTerm += (GainIntegral * error * (float)timeSinceLastUpdate.TotalSeconds);
             IntegralTerm = Clamp(IntegralTerm);
 
             // derivative term calculation
             float dInput = processVariable - ProcessVariableLast;
-            float derivativeTerm = GainDerivative * (dInput / (float)timeSinceLastUpdate.TotalMilliseconds);
+            float derivativeTerm = GainDerivative * (dInput / (float)timeSinceLastUpdate.TotalSeconds);
 
             // proportional term calcullation
             float proportionalTerm = GainProportional * error;
 
-            float output = proportionalTerm + IntegralTerm + derivativeTerm;
+            float output = proportionalTerm + IntegralTerm - derivativeTerm;
 
             output = Clamp(output);
 
