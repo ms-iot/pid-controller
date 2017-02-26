@@ -40,21 +40,22 @@ PidController controller = new PidController(float GainProportional, float GainI
   * ```OutputMin``` - The minimum value the ```ControlVariable``` property can return
 
 ## Properties
-| Property            | Type        | Access  | Description                                                     |
-|---------------------|-------------|---------|-----------------------------------------------------------------|
-| GainProportional    | ```float``` | get/set | The proportional gain in the feedback loop                      |
-| GainIntegral        | ```float``` | get/set | The integral gain in the feedback loop                          |
-| GainDerivative      | ```float``` | get/set | The derivative gain in the feedback loop                        |
-| OutputMax           | ```float``` | get     | The maximum value the ```ControlVariable``` property can return |
-| OutputMin           | ```float``` | get     | The minimum value the ```ControlVariable``` property can return |
-| IntegralTerm        | ```float``` | get     | Tracks the accumulated error in the control loop                |
-| ProcessVariable     | ```float``` | get/set | Current value of the process under control                      |
-| ProcessVariableLast | ```float``` | get     | Last stored value of the process under control                  |
-| SetPoint            | ```float``` | get/set | The desired value of the process under control                  |
+| Property            | Type         | Access  | Description                                                     |
+|---------------------|--------------|---------|-----------------------------------------------------------------|
+| GainProportional    | ```double``` | get/set | The proportional gain in the feedback loop                      |
+| GainIntegral        | ```double``` | get/set | The integral gain in the feedback loop                          |
+| GainDerivative      | ```double``` | get/set | The derivative gain in the feedback loop                        |
+| OutputMax           | ```double``` | get     | The maximum value the ```ControlVariable``` function can return |
+| OutputMin           | ```double``` | get     | The minimum value the ```ControlVariable``` function can return |
+| IntegralTerm        | ```double``` | get     | Tracks the accumulated error in the control loop                |
+| ProcessVariable     | ```double``` | get/set | Current value of the process under control                      |
+| ProcessVariableLast | ```double``` | get     | Last stored value of the process under control                  |
+| SetPoint            | ```double``` | get/set | The desired value of the process under control                  |
 
 ## Functions
-| Property            | Type        | Access  | Description                                                     |
-| ControlVariable(```TimeSpan timeSinceLastUpdate```)     | ```float``` | The control variable that drives the process under control, depending on the amount of time that passed since the last time it was called      |
+| Function        | Return Type  | Description  |
+|-----------------|--------------|-----------------------|
+| ControlVariable(```TimeSpan timeSinceLastUpdate```)     | ```double``` | The control variable that drives the process under control, depending on the amount of time that passed since the last time it was called      |
 
 ## Tuning
 There are lots of resources online for learning how to tune a PID controller. For a quick primer see the Wikipedia entry on [manual tuning](https://en.wikipedia.org/wiki/PID_controller#Manual_tuning).
